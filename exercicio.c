@@ -110,45 +110,119 @@ int teste_PA (int n, float *v){
 */ 
 
 /*LISTA VETORES E ALOCACAO DINAMICA */
-/* questao 9 */
+/* questao 10 */
+/*
 #include <stdio.h> 
 #include <stdlib.h> 
 
+void criaMatriculas(int numAlunos, int* ptrmat); 
+void criaNotas(int numAlunos, float* ptrnotas); 
+void criaAprovados(int numAluno, int  *v_matricula, float *v_notas, int *aprovado, int* v_aprovado);
 
-void criaAprovados(numAluno, int *v_matricula, float *v_notas, int *aprovado ); 
-
-int main (void){
-    /* Criar vetor matriculas */
-    int quant; 
-    printf("Digite a quantidade de alunos: "); 
-    scanf("%d", quant);
-    int vmatri[quant]; 
-
-    /* Criar vetor notas */
-    float vnotas[quant]; 
-
-    /*variavel de aprovados*/
-    int aprovados; 
-
-    matriculas[quant]; 
-    int *v= (int*)  malloc ( quant *sizeof(int)); 
-    if (v == NULL) {
-        printf("Memoria insuficiente.\n");
+int main(void) {
+    int quant;
+    printf("Digite a quantidade de alunos: ");
+    scanf("%d", &quant);
+    int* vmatri = (int*)malloc(quant * sizeof(int)); 
+    if (vmatri == NULL) {
+        printf("ocorru um erro na alocacao da memoria"); 
         exit(1); 
     }
-    criaAprovados(quant, vmatri, vnotas, &aprovados, v); 
-    free(v); 
+    criaMatriculas(quant, vmatri); 
+    float* vnotas = (float*)malloc(quant * sizeof(float)); 
+    if (vnotas == NULL) {
+        printf("Ocorreu um erro na alocacao dessa memoria"); 
+        exit(1); 
+    }
+    criaNotas(quant, vnotas); 
+    int aprovados=0;
+
+    int* v = (int*)malloc(quant * sizeof(int));
+    if (v == NULL) {
+        printf("Memoria insuficiente.\n");
+        exit(1);
+    }
+ 
+    criaAprovados(quant, vmatri, vnotas, &aprovados, v);
+
+    if (aprovados == 0) {
+        printf("nao ha nenhum aluno aprovado"); 
+        exit(1); 
+    }
+
+    for (int i = 0; i < aprovados; i++) {
+        printf("%d ", v[i]); 
+    }
+
+    free(vnotas); 
+    free(vmatri); 
+    free(v);
+    return 0;
+}
+
+void criaAprovados(int numAluno, int *v_matricula, float* v_notas, int* aprovado, int* v_aprovado) {
+    for (int i = 0; i < numAluno; i++) {
+        int j = 0;
+        if (v_notas[i] >= 5) {
+            v_aprovado[j] = v_matricula[i]; 
+            (*aprovado)++;
+            j++; 
+        }
+    }
+}
+
+void criaMatriculas(int numAlunos, int* ptrmat) {
+    for (int i = 0; i < numAlunos; i++) {
+        printf("Digite a matricula do aluno: "); 
+        scanf("%d", &ptrmat[i]); 
+    }
+}
+
+void criaNotas(int numAlunos, float* ptrnotas) {
+    for (int i = 0; i < numAlunos; i++) {
+        printf("Digite a nota do aluno: ");
+        scanf("%f", &ptrnotas[i]);
+    }
+}
+*/
+
+/* questao 10 */
+#include <stdio.h> 
+#include <stdlib.h> 
+
+int *valores_entre(int *v, int n, int min, int max, int *qtd); 
+
+int main (void){
+    int vet[]= {2, 4, 7, 8, 34, 6, 78, 33};
+    int min, max; 
+    printf("Digite o valor minimo a ser buscado: "); 
+    scanf(" %d", &min); 
+    printf("Digite o valor maximo a ser buscado: "); 
+    scanf(" %d", &max); 
+
+    int *qtd= (int*)malloc( 7 *sizeof(int)); 
+    if (qtd == NULL){
+        printf("Erro no alocamento da memoria! "); 
+        exit(1); 
+    }
+    int numVal= valores_entre(vet, 9, min, max, qtd); 
+    if (numVal==0){
+        printf("Erro nenhum valor foi encontrado!!!"); 
+        return 1; 
+    }
+    free(qtd); 
     return 0; 
 }
 
-void criaAprovados(numAluno, int *v_matricula, float *v_notas, int *aprovado, int *v_aprovado ){
-    for(int i=0; i<numAlunos; i++){
+int *valores_entre(int *v, int n, int min, int max, int *qtd){
+    int valores =0; 
+    for (int i=0; i<n; i++){
         int j=0; 
-        if (v_notas>=5 ){
-            v_aprovado[j]= v_matricula[i]; /* ??? */
-            *aprovado++; 
+        if(min>v[i] && max<v[i]){
+            qtd[j]= v[i]; 
+            valores++; 
         }
+        j++; 
     }
-    
+    return valores; 
 }
-
